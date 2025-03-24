@@ -9,6 +9,7 @@ from . import lunch_product
 from . import lunch_product_category
 from . import lunch_topping
 from . import lunch_supplier
+from . import lunch_cuisine
 from . import res_company
 from . import res_config_settings
 from . import res_users

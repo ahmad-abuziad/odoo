@@ -49,6 +49,7 @@ class LunchSupplier(models.Model):
     state_id = fields.Many2one("res.country.state", related='partner_id.state_id', readonly=False)
     country_id = fields.Many2one('res.country', related='partner_id.country_id', readonly=False)
     company_id = fields.Many2one('res.company', related='partner_id.company_id', readonly=False, store=True)
+    cuisine_ids = fields.Many2many('lunch.cuisine', string='Cuisines')
 
     responsible_id = fields.Many2one('res.users', string="Responsible", domain=lambda self: [('groups_id', 'in', self.env.ref('lunch.group_lunch_manager').id)],
                                      default=lambda self: self.env.user,

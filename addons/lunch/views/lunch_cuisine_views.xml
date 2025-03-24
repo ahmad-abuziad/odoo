@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="lunch_cuisine_view_search" model="ir.ui.view">
+        <field name="name">lunch.cuisine.view.search</field>
+        <field name="model">lunch.cuisine</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="lunch_cuisine_form_view" model="ir.ui.view">
+        <field name="name">lunch.cuisine.view.form</field>
+        <field name="model">lunch.cuisine</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="lunch_cuisine_tree_view" model="ir.ui.view">
+        <field name="name">lunch.cuisine.view.form</field>
+        <field name="model">lunch.cuisine</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="lunch_cuisine_kanban_view" model="ir.ui.view">
+        <field name="name">lunch.cuisine.view.kanban</field>
+        <field name="model">lunch.cuisine</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="lunch_cuisine_action" model="ir.actions.act_window">
+        <field name="name">Lunch cuisines</field>
+        <field name="res_model">lunch.cuisine</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="search_view_id" ref="lunch_cuisine_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                To see some cuisines, create one using the create button
+            </p>
+        </field>
+    </record>
+</odoo>

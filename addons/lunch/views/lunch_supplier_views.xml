@@ -26,6 +26,8 @@
 
                         <label for="name" string="Vendor"/>
                         <h1><field name="name" required="1" placeholder="e.g. The Pizzeria Inn"/></h1>
+                        <label for="cuisine_ids" string="Cuisine"/>
+                        <field name="cuisine_ids" widget="many2many_tags"/>
                     </div>
                     <group>
                         <group>
