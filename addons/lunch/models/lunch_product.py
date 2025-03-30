@@ -19,7 +19,7 @@ class LunchProduct(models.Model):
     _check_company_auto = True
 
     name = fields.Char('Product Name', required=True, translate=True)
-    category_id = fields.Many2one('lunch.product.category', 'Product Category', check_company=True, required=True)
+    category_id = fields.Many2one('lunch.product.category', 'Product Category', domain="[('supplier_id', '=', supplier_id)]", check_company=True, required=True)
     description = fields.Html('Description', translate=True)
     price = fields.Float('Price', digits='Account', required=True)
     supplier_id = fields.Many2one('lunch.supplier', 'Vendor', check_company=True, required=True)
@@ -74,6 +74,12 @@ class LunchProduct(models.Model):
                 product.last_order_date = False
             else:
                 product.last_order_date = max(mapped_orders[product].mapped('date'))
+
+    @api.onchange('supplier_id')
+    def _onchange_supplier_id(self):
+        """ Reset category_id if the supplier changes and it's not related """
+        if self.category_id and self.category_id.supplier_id != self.supplier_id:
+            self.category_id = False
 
     def _compute_is_available_at(self):
         """

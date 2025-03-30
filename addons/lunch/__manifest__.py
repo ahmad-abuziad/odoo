@@ -36,7 +36,7 @@ If you want to save your employees' time and avoid them to always have coins in 
         'data/mail_template_data.xml',
         'data/lunch_data.xml',
     ],
-    'demo': ['data/lunch_demo.xml'],
+    'demo': [],
     'installable': True,
     'application': True,
     'assets': {

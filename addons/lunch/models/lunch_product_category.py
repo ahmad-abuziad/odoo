@@ -20,6 +20,7 @@ class LunchProductCategory(models.Model):
 
     name = fields.Char('Product Category', required=True, translate=True)
     company_id = fields.Many2one('res.company')
+    supplier_id = fields.Many2one('lunch.supplier', 'Vendor', check_company=True, required=True)
     currency_id = fields.Many2one('res.currency', related='company_id.currency_id')
     product_count = fields.Integer(compute='_compute_product_count', help="The number of products related to this category")
     active = fields.Boolean(string='Active', default=True)

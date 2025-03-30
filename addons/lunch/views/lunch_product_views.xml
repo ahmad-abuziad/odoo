@@ -81,8 +81,8 @@
                     <group>
                         <group>
                             <field name="active" invisible="1"/>
-                            <field name='category_id'/>
                             <field name='supplier_id'/>
+                            <field name="category_id" domain="[('supplier_id', '=', supplier_id)]"/>
                             <field name='price' widget="monetary"/>
                         </group>
                         <group>
@@ -187,7 +187,7 @@
         <field name="arch" type="xml">
             <list string="Products List">
                 <field name='name' string="Product Category"/>
-                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="supplier_id" string="Vendor"/>
             </list>
         </field>
     </record>
@@ -213,8 +213,8 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <label for="company_id" groups="base.group_multi_company"/>
-                    <field name="company_id" groups="base.group_multi_company"/>
+                    <label for="supplier_id" string="Vendor"/>
+                    <field name="supplier_id"/>
                 </sheet>
             </form>
         </field>
@@ -238,7 +238,7 @@
                                 <field string="Products" name="product_count" widget="statinfo"/>
                             </button>
                             <field name="name" class="fw-bold"/>
-                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="supplier_id" string="Vendor"/>
                         </main>
                     </t>
                 </templates>
