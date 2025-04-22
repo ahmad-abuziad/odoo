@@ -823,7 +823,8 @@ class AccountMove(models.Model):
     def _compute_hide_post_button(self):
         for record in self:
             record.hide_post_button = record.state != 'draft' \
-                or record.auto_post != 'no' and record.date > fields.Date.context_today(record)
+                or record.auto_post != 'no' and \
+                record.date and record.date > fields.Date.context_today(record)
 
     @api.depends('journal_id')
     def _compute_company_id(self):
@@ -911,8 +912,8 @@ class AccountMove(models.Model):
     @api.depends('date', 'journal_id', 'move_type', 'name', 'posted_before', 'sequence_number', 'sequence_prefix', 'state')
     def _compute_name_placeholder(self):
         for move in self:
-            if (not move.name or move.name == '/') and not move._get_last_sequence():
-                sequence_format_string, sequence_format_values = move._get_sequence_format_param(move._get_starting_sequence())
+            if (not move.name or move.name == '/') and move.date and not move._get_last_sequence():
+                sequence_format_string, sequence_format_values = move._get_next_sequence_format()
                 sequence_format_values['seq'] = sequence_format_values['seq'] + 1
                 move.name_placeholder = sequence_format_string.format(**sequence_format_values)
             else:
