@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="test_model_action" model="ir.actions.act_window">
+        <field name="name">Test action</field>
+        <field name="res_model">test_model</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="test_model_view_list" model="ir.ui.view">
+        <field name="name">Test view list</field>
+        <field name="model">test_model</field>
+        <field name="arch" type="xml">
+            <list string="Test">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="postcode"/>
+                <field name="date_availability"/>
+                <field name="bedrooms"/>
+                <field name="selling_price"/>
+            </list>
+        </field>
+    </record>
+    <record id="test_model_view_form" model="ir.ui.view">
+        <field name="name">Test View Form</field>
+        <field name="model">test_model</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="selling_price"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="test_model_search" model="ir.ui.view">
+        <field name="name">Test model search</field>
+        <field name="model">test_model</field>
+        <field name="arch" type="xml">
+            <search string="Test model">
+                <field name="name" string="Name" />
+                <field name="description"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Postcode" name="postcode" context="{'group_by':'postcode', 'garage':True}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
