@@ -96,6 +96,10 @@ class PosOrder(models.Model):
         else:
             pos_order = existing_order
 
+            # If the order is belonging to another session, it must be moved to the current session first
+            if order.get('session_id') and order['session_id'] != pos_order.session_id.id:
+                pos_order.write({'session_id': order['session_id']})
+
             # Save lines and payments before to avoid exception if a line is deleted
             # when vals change the state to 'paid'
             for field in ['lines', 'payment_ids']:
@@ -136,7 +140,7 @@ class PosOrder(models.Model):
 
     def _process_saved_order(self, draft):
         self.ensure_one()
-        if not draft:
+        if not draft and self.state != 'cancel':
             try:
                 self.action_pos_order_paid()
             except psycopg2.DatabaseError:
@@ -746,7 +750,7 @@ class PosOrder(models.Model):
             'invoice_date': invoice_date.astimezone(timezone).date(),
             'fiscal_position_id': self.fiscal_position_id.id,
             'invoice_line_ids': self._prepare_invoice_lines(),
-            'invoice_payment_term_id': self.partner_id.property_payment_term_id.id or False,
+            'invoice_payment_term_id': False,
             'invoice_cash_rounding_id': self.config_id.rounding_method.id,
         }
         if self.refunded_order_id.account_move:

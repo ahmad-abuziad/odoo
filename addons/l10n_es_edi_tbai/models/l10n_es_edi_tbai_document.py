@@ -218,9 +218,9 @@ class L10nEsEdiTbaiDocument(models.Model):
                 error_code = response_headers['eus-bizkaia-n3-codigo-respuesta']
                 error_msg = response_headers['eus-bizkaia-n3-mensaje-respuesta']
                 errors.append(error_code + ": " + error_msg)
-            if errors:
-                return False, errors
-            return self._process_post_response_xml_bi(env, response_xml)
+            success, errors_add = self._process_post_response_xml_bi(env, response_xml)
+            errors += errors_add
+            return success, errors
 
     def _prepare_post_params_ar_gi(self):
         """Web service parameters for Araba and Gipuzkoa."""
@@ -296,6 +296,7 @@ class L10nEsEdiTbaiDocument(models.Model):
             'sender_vat': sender.vat[2:] if sender.vat.startswith('ES') else sender.vat,
             'fiscal_year': str(self.date.year),
             'freelancer': freelancer,
+            'is_freelancer': freelancer,  # For bugfix, will be removed in master
             'epigrafe': self.env['ir.config_parameter'].sudo().get_param('l10n_es_edi_tbai.epigrafe', '')
         }
         lroe_values.update({'tbai_b64_list': [base64.b64encode(self.xml_attachment_id.raw).decode()]})
@@ -307,6 +308,8 @@ class L10nEsEdiTbaiDocument(models.Model):
     @api.model
     def _process_post_response_xml_bi(self, env, response_xml):
         """Government response processing for Bizkaia."""
+        if response_xml is None:
+            return False, []
         success = response_xml.findtext('.//EstadoRegistro') == "Correcto"
 
         if success:
@@ -414,7 +417,7 @@ class L10nEsEdiTbaiDocument(models.Model):
             **self._get_regime_code_value(values['taxes'], values['is_simplified']),
         }
 
-        if not values['partner'] or not values['partner']._l10n_es_is_foreign():
+        if not values['partner'] or not values['partner']._l10n_es_is_foreign() or values["is_simplified"]:
             sale_values.update(**self._get_importe_desglose_es_partner(values['base_lines'], values['is_refund']))
         else:
             sale_values.update(**self._get_importe_desglose_foreign_partner(values['base_lines'], values['is_refund']))
